@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt/br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Progress Bar</title>
+    <style>
+        body {
+            height: 2000px; /* Altura grande para permitir a rolagem */
+        }
+        #td-srp-fixed-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #f0f0f0;
+            z-index: 1000;
+        }
+        .td-srp-bar {
+            height: 5px;
+            background: #ddd;
+        }
+        .td-srp-bar-fill {
+            height: 5px;
+            background: #4caf50;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="td-srp-fixed-wrap">
+    <div id="uniqueBlock_b" class="td-srp-bar td-srp-top" data-article-index="1">
+        <div class="td-srp-bar-fill" style="width: 0%;"></div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Função para criar a barra fixa
+    function createFixedBar(a, b, c) {
+        c = void 0 === c ? 0 : c;
+        var d = a.barPosition,
+            f = jQuery("#td-srp-fixed-wrap"),
+            e = jQuery(".td-srp-" + d + '[data-article-index="' + b + '"]');
+        f.length || (jQuery("body").prepend('<div id="td-srp-fixed-wrap"></div>'),
+        f = jQuery("#td-srp-fixed-wrap"));
+        e.length || f.append('<div id="' + a.blockUid + '_b" class="td-srp-bar td-srp-' + d + '" data-article-index="' + b + '"><div class="td-srp-bar-fill" ' + (0 < c ? 'style="width:' + c + '%"' : "") + "></div></div>")
+    }
+
+    // Exemplo de criação da barra
+    let a = {
+        barPosition: "top",
+        blockUid: "uniqueBlock"
+    };
+    createFixedBar(a, 1, 0);
+
+    // Função para atualizar a largura da barra conforme a rolagem
+    $(window).on('scroll', function() {
+        var scrollTop = $(window).scrollTop();
+        var docHeight = $(document).height();
+        var winHeight = $(window).height();
+        var scrollPercent = (scrollTop) / (docHeight - winHeight);
+        var scrollPercentRounded = Math.round(scrollPercent * 100);
+
+        $(".td-srp-bar-fill").css('width', scrollPercentRounded + '%');
+    });
+</script>
+
+</body>
+</html>
