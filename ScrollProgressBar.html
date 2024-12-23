@@ -6,63 +6,69 @@
     <title>Scroll Progress Bar</title>
     <style>
         body {
-            height: 2000px; /* Altura grande para permitir a rolagem */
+            height: 2000px; /* Define uma altura grande para permitir a rolagem da página */
         }
         #td-srp-fixed-wrap {
-            position: fixed;
+            position: fixed; /* Mantém o elemento fixo no topo da janela de visualização */
             top: 0;
             left: 0;
-            width: 100%;
-            background: #f0f0f0;
-            z-index: 1000;
+            width: 100%; /* Faz o elemento ocupar toda a largura da página */
+            background: #f0f0f0; /* Cor de fundo da área fixa */
+            z-index: 1000; /* Garante que o elemento fique sobre outros elementos */
         }
         .td-srp-bar {
-            height: 5px;
-            background: #ddd;
+            height: 5px; /* Altura da barra de progresso */
+            background: #ddd; /* Cor de fundo da barra */
         }
         .td-srp-bar-fill {
-            height: 5px;
-            background: #4caf50;
-            width: 0;
+            height: 5px; /* Altura da parte preenchida da barra */
+            background: #4caf50; /* Cor do preenchimento da barra */
+            width: 0; /* Largura inicial (nenhum progresso) */
         }
     </style>
 </head>
 <body>
 
 <div id="td-srp-fixed-wrap">
+    <!-- Estrutura da barra de progresso fixa -->
     <div id="uniqueBlock_b" class="td-srp-bar td-srp-top" data-article-index="1">
-        <div class="td-srp-bar-fill" style="width: 0%;"></div>
+        <div class="td-srp-bar-fill" style="width: 0%;"></div> <!-- Parte que será preenchida -->
     </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Função para criar a barra fixa
+    // Função para criar a barra fixa dinamicamente
     function createFixedBar(a, b, c) {
-        c = void 0 === c ? 0 : c;
-        var d = a.barPosition,
-            f = jQuery("#td-srp-fixed-wrap"),
-            e = jQuery(".td-srp-" + d + '[data-article-index="' + b + '"]');
+        c = void 0 === c ? 0 : c; // Define o valor padrão de 'c' como 0
+        var d = a.barPosition, // Posição da barra (top ou outra)
+            f = jQuery("#td-srp-fixed-wrap"), // Elemento do container fixo
+            e = jQuery(".td-srp-" + d + '[data-article-index="' + b + '"]'); // Seleciona a barra baseada no índice do artigo
+
+        // Verifica se o container já existe, caso contrário, cria um novo
         f.length || (jQuery("body").prepend('<div id="td-srp-fixed-wrap"></div>'),
         f = jQuery("#td-srp-fixed-wrap"));
+
+        // Adiciona a barra ao container se ela não existir
         e.length || f.append('<div id="' + a.blockUid + '_b" class="td-srp-bar td-srp-' + d + '" data-article-index="' + b + '"><div class="td-srp-bar-fill" ' + (0 < c ? 'style="width:' + c + '%"' : "") + "></div></div>")
     }
 
-    // Exemplo de criação da barra
+    // Exemplo de criação da barra usando a função acima
     let a = {
-        barPosition: "top",
-        blockUid: "uniqueBlock"
+        barPosition: "top", // Define a posição como topo
+        blockUid: "uniqueBlock" // Identificador único para o bloco
     };
-    createFixedBar(a, 1, 0);
+    createFixedBar(a, 1, 0); // Cria a barra com índice 1 e preenchimento inicial de 0%
 
     // Função para atualizar a largura da barra conforme a rolagem
     $(window).on('scroll', function() {
-        var scrollTop = $(window).scrollTop();
-        var docHeight = $(document).height();
-        var winHeight = $(window).height();
-        var scrollPercent = (scrollTop) / (docHeight - winHeight);
-        var scrollPercentRounded = Math.round(scrollPercent * 100);
+        var scrollTop = $(window).scrollTop(); // Posição atual da rolagem
+        var docHeight = $(document).height(); // Altura total do documento
+        var winHeight = $(window).height(); // Altura da janela de visualização
+        var scrollPercent = (scrollTop) / (docHeight - winHeight); // Calcula a porcentagem de rolagem
+        var scrollPercentRounded = Math.round(scrollPercent * 100); // Arredonda a porcentagem
 
+        // Atualiza a largura da barra de progresso com base na porcentagem
         $(".td-srp-bar-fill").css('width', scrollPercentRounded + '%');
     });
 </script>
